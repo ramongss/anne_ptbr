@@ -1,0 +1,75 @@
+project:
+  type: book
+  output-dir: _book
+
+book:
+  title: "Engenharia de Redes Neurais Artificiais"
+  author: "Victor Henrique Alves Ribeiro"
+  page-navigation: true
+  repo-url: https://github.com/vhrique/anne_ptbr
+  repo-actions: [edit, issue]
+  language: pt
+  navbar: 
+    search: true
+
+  chapters:
+    - index.qmd
+    
+    - part: "**Fundamentos de Redes Neurais Artificiais**"
+      chapters:
+        - 00b_Introducao.qmd
+        - Perceptron.qmd
+        - Perceptron_Multicamadas.qmd
+        - Otimizacao_Redes_Neurais.qmd
+
+    - part: "**Componentes de Redes Neurais Artificiais**"
+      chapters:
+        - Camadas_Lineares_Ativacao.qmd
+        - 03_Redes_Neurais_Convolucionais.qmd
+        - 04a_Redes_Neurais_Recorrentes.qmd
+        - 04b_Transformers.qmd
+        - Regularizacao.qmd
+    
+    - part: "**Paradigmas de Aprendizagem**"
+      chapters:
+        - Aprendizagem_Supervisionada.qmd
+        - 05a_Aprendizagem_de_Metricas.qmd
+        - 05c_Aprendizagem_Nao_Supervisionada.qmd
+        - 05b_Aprendizagem_Auto_Supervisionado.qmd
+        - Aprendizagem_Multitarefas.qmd
+        - Modelos_Multimodais.qmd
+        - Aprendizagem_Joint_Embedding.qmd
+
+    - part: "**Aspectos Práticos**"
+      chapters:
+        - Transfer_Learning.qmd
+        - Reducao_Modelos.qmd
+        - Adaptacao_Dominio.qmd
+        - Receita_Treino_ANN.qmd
+
+    - part: "**Tópicos Especiais**"
+      chapters:
+        - 08a_Novas_Fronteiras.qmd
+        - 08b_Topicos_Especiais.qmd
+
+    - part: "**Conteúdos Adicionais**"
+      chapters:
+        - A01_Fundamentos_de_Pytorch.qmd
+        - A03_Visao_Computacional.qmd
+
+format:
+  html: 
+    theme:
+      light: cosmo
+      dark: darkly
+    code-fold: false
+    code-tools: false
+    toc: true
+    toc-title: "Conteúdo"
+    toc-depth: 3
+    toc-expand: true
+    number-sections: false
+    highlight-style: atom-one
+
+execute: 
+  freeze: true

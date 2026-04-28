@@ -1,0 +1,56 @@
+---
+jupyter: python3
+---
+
+<a href="https://colab.research.google.com/github/vhrique/anne_ptbr/blob/main/Regularizacao.ipynb" target="_parent"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/></a>
+
+# Regularização de Redes Neurais
+
+## Camadas de Normalização
+
+Camadas de normalização surgiram para estabilizar e acelerar o treinamento de redes profundas. Nas primeiras CNNs, era comum o uso de Local Response Normalization (LRN), que normalizava a ativação de um neurônio considerando seus vizinhos próximos, inspirada em mecanismos biológicos de inibição lateral. Mais tarde, a técnica de Batch Normalization (BatchNorm) se tornou dominante, pois normaliza as ativações de cada camada em um mini-batch, reduzindo o internal covariate shift e permitindo taxas de aprendizado maiores e convergência mais estável.
+
+### Local Response Normalization
+
+A Local Response Normalization (LRN) é uma técnica de normalização usada em redes neurais convolucionais, introduzida pela primeira vez na AlexNet (Krizhevsky et al, 2012). Inspirada pela inibição lateral em neurônios biológicos, a LRN normaliza a ativação de um neurônio considerando a resposta de seus neurônios vizinhos dentro de uma pequena região. Isso ajuda a destacar ativações mais fortes e suprimir as mais fracas, promovendo uma competição entre neurônios e melhorando a generalização da rede. Embora tenha sido popular em arquiteturas antigas, como AlexNet e GoogLeNet, o LRN foi substituído por métodos mais modernos, como o Batch Normalization
+
+<center><img src="https://github.com/vhrique/anne_ptbr/blob/main/figures/lrnorm.jpg?raw=true" width=300></center>
+
+### Batch Normalization
+
+Batch Normalization (BN), introduzido por Ioffe e Szegedy em 2015, é uma técnica que normaliza as ativações de uma camada neural para cada mini-lote durante o treinamento. O principal objetivo do Batch Normalization é mitigar o problema do deslocamento interno da covariância, que ocorre quando as distribuições das ativações mudam de forma significativa entre as camadas durante o treinamento, dificultando a convergência. Ao normalizar as ativações de cada mini-lote com base na média e na variância, o BN estabiliza e acelera o treinamento, permitindo o uso de taxas de aprendizado maiores. Além disso, o BN atua como uma forma de regularização, reduzindo a necessidade de técnicas como o Dropout, e facilita o treinamento de redes neurais mais profundas. Essa técnica foi amplamente adotada em arquiteturas modernas, como a ResNet, e se tornou um componente padrão na maioria das redes neurais convolucionais.
+
+<center><img src="https://github.com/vhrique/anne_ptbr/blob/main/figures/batchnorm.jpg?raw=true" width=300></center>
+
+### Layer Normalization
+
+Por outro lado, a Layer Normalization (LayerNorm) normaliza cada amostra de forma independente, sem depender de outras amostras no lote, preservando assim as dependências temporais e contextuais dentro das sequências.
+A LayerNorm foi introduzida em 2016, por Jimmy Lei Ba, Jamie Ryan Kiros e Geoffrey Hinton. A técnica foi desenvolvida para normalizar as ativações das camadas de redes neurais recorrentes de forma independente em cada amostra, ao invés de calcular as estatísticas em lotes de dados como no Batch Normalization.
+
+<center><img src="https://github.com/vhrique/anne_ptbr/blob/main/figures/layernorm.jpg?raw=true" width=300></center>
+
+### Outras camadas de Normalização
+
+Além da BatchNorm, outras normalizações foram propostas para lidar com diferentes cenários. A Instance Normalization (InstanceNorm) normaliza cada canal de cada amostra separadamente, sem considerar estatísticas do batch, o que a tornou popular em aplicações de visão computacional como style transfer. Por fim, a Group Normalization (GroupNorm) divide os canais em grupos e normaliza dentro de cada grupo, funcionando bem mesmo com batches muito pequenos, o que a torna útil em tarefas de visão de alta resolução em que limitações de memória restringem o tamanho do batch.
+
+## Dropout
+
+## Regularização L1 e L2
+
+### Regularização L1 (LASSO)
+
+### Regularização L2 (Weight Decay)
+
+## Label Smoothing
+
+## Data Augmentation
+
+## Weight Averaging
+
+# Referências
+
+
+- Krizhevsky, A., Sutskever, I., & Hinton, G. E. (2012). Imagenet classification with deep convolutional neural networks. Advances in neural information processing systems, 25.
+- Ioffe, S. (2015). Batch normalization: Accelerating deep network training by reducing internal covariate shift. arXiv preprint arXiv:1502.03167.
+- Ba, J. L. (2016). Layer normalization. arXiv preprint arXiv:1607.06450.
+

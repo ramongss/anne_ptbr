@@ -1,1 +1,15 @@
-_build
+# Quarto build outputs
+_book/
+*.quarto_ipynb
+*_files/
+site_libs/
+*.html
+.quarto
+
+# Python
+__pycache__/
+.ipynb_checkpoints/
+*.pyc
+
+# Data pesada (opcional, se o MNIST for grande demais)
+data/MNIST/
