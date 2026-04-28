@@ -1,24 +1,49 @@
-name: Render and Publish Quarto Book
+name: Build and Deploy Quarto Website
 
 on:
   push:
     branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
 
 jobs:
-  build-deploy:
+  build:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
 
     steps:
-      - name: Checkout
+      - name: Checkout repository
         uses: actions/checkout@v4
-
-      - name: Setup Quarto
+      
+      - name: Set up Quarto
         uses: quarto-dev/quarto-actions/setup@v2
-
-      - name: Render and Publish to GitHub Pages
-        uses: quarto-dev/quarto-actions/publish@v2
+      
+      - name: Render Quarto website
+        uses: quarto-dev/quarto-actions/render@v2
         with:
-          target: gh-pages
-          render: "false"   # ← usa o _freeze, não re-executa
+          to: html
+      
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: "_site"
+        
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
