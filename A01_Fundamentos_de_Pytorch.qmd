@@ -1,0 +1,236 @@
+---
+jupyter: python3
+---
+
+<a href="https://colab.research.google.com/github/vhrique/anne_ptbr/blob/main/A01_Fundamentos_de_Pytorch.ipynb" target="_parent"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/></a>
+
+# Fundamentos de Pytorch
+
+O material abaixo traz breves exemplos de operações em Pytorch.
+Ao final, também realizamos o treinamento de um _perceptron_ multicamadas.
+
+# Pacotes Utilizados
+
+```{python}
+import torch
+import matplotlib.pyplot as plt
+
+from sklearn.datasets import make_moons
+from sklearn.metrics import classification_report
+from torch.utils.data import DataLoader, TensorDataset
+```
+
+# Dispositivo
+
+```{python}
+#| colab: {base_uri: https://localhost:8080/}
+device = 'cuda' if torch.cuda.is_available() else 'cpu'
+print(f'Dispositivo atual: {device}')
+```
+
+# Variáveis
+
+```{python}
+#| colab: {base_uri: https://localhost:8080/}
+# Criando variáveis simples no PyTorch como tensores
+a = torch.tensor(5)  # Um tensor escalar
+b = torch.tensor([1.0, 2.0, 3.0])  # Um tensor de 1D (vetor)
+
+print(f"Variável escalar: {a}")
+print(f"Variável vetor: {b}")
+```
+
+```{python}
+#| colab: {base_uri: https://localhost:8080/}
+# Também é possível criar variáveis com dimensões mais altas
+c = torch.tensor([[1, 2], [3, 4]])  # Um tensor 2D (matriz)
+
+print(f"Variável matriz: \n{c}")
+```
+
+```{python}
+#| colab: {base_uri: https://localhost:8080/}
+# Podemos criar tensores com tipos específicos
+d = torch.tensor([1.0, 2.0, 3.0], dtype=torch.float32)  # Um tensor com precisão em ponto flutuante
+
+print(f"Variável de ponto flutuante: {d}")
+```
+
+# Operações
+
+```{python}
+# Operações básicas com tensores
+x = torch.tensor([2.0, 3.0, 4.0])
+y = torch.tensor([1.0, 5.0, 7.0])
+```
+
+```{python}
+#| colab: {base_uri: https://localhost:8080/}
+# Soma
+soma = x + y
+print(f"Soma: {soma}")
+
+# Subtração
+subtracao = x - y
+print(f"Subtração: {subtracao}")
+```
+
+```{python}
+#| colab: {base_uri: https://localhost:8080/}
+# Multiplicação
+multiplicacao = x * y
+print(f"Multiplicação: {multiplicacao}")
+
+# Divisão
+divisao = x / y
+print(f"Divisão: {divisao}")
+```
+
+```{python}
+#| colab: {base_uri: https://localhost:8080/}
+# Produto escalar
+produto_escalar = torch.dot(x, y)
+print(f"Produto escalar: {produto_escalar}")
+```
+
+```{python}
+#| colab: {base_uri: https://localhost:8080/}
+# Funções matemáticas
+exp = torch.exp(x)  # Exponencial
+print(f"Exponencial: {exp}")
+```
+
+```{python}
+#| colab: {base_uri: https://localhost:8080/}
+# Criando matrizes (tensores 2D)
+A = torch.tensor([[1.0, 2.0], [3.0, 4.0]])  # Matriz 2x2
+B = torch.tensor([[5.0, 6.0], [7.0, 8.0]])  # Outra Matriz 2x2
+
+# Multiplicação elemento a elemento (Hadamard product)
+elementwise_mult = A * B
+print(f"Multiplicação elemento a elemento: \n{elementwise_mult}")
+```
+
+```{python}
+#| colab: {base_uri: https://localhost:8080/}
+# Multiplicação de matrizes (produto de matrizes)
+matrix_mult = torch.matmul(A, B)
+print(f"Multiplicação de matrizes: \n{matrix_mult}")
+```
+
+```{python}
+#| colab: {base_uri: https://localhost:8080/}
+# Transposição de matriz
+A_transpose = torch.transpose(A, 0, 1)
+print(f"Transposta da matriz A: \n{A_transpose}")
+```
+
+```{python}
+#| colab: {base_uri: https://localhost:8080/}
+# Inversão de uma matriz (usando tensores quadrados invertíveis)
+A_inv = torch.inverse(A)
+print(f"Inversa da matriz A: \n{A_inv}")
+```
+
+```{python}
+#| colab: {base_uri: https://localhost:8080/}
+# Produto de uma matriz com sua transposta
+A_mult_transpose = torch.matmul(A, A_transpose)
+print(f"Produto de A com sua transposta: \n{A_mult_transpose}")
+```
+
+# Redes Neurais
+
+## Representação
+
+```{python}
+class MLP(torch.nn.Module):
+    def __init__(self, input_size, hidden_size):
+        super(MLP, self).__init__()
+        self.hidden_layer = torch.nn.Linear(input_size, hidden_size)
+        self.output_layer = torch.nn.Linear(hidden_size, 1)
+
+    def forward(self, x):
+        x = torch.nn.functional.sigmoid(self.hidden_layer(x))
+        return torch.nn.functional.sigmoid(self.output_layer(x))
+```
+
+```{python}
+model = MLP(2, 3)
+```
+
+```{python}
+#| colab: {base_uri: https://localhost:8080/}
+model(torch.Tensor([[0, 0]]))
+```
+
+## Loss e Otimizador
+
+```{python}
+criterion = torch.nn.BCELoss()
+optimizer = torch.optim.Adam(model.parameters(), lr=1e-2)
+```
+
+## Dataset
+
+```{python}
+X, y = make_moons(n_samples=200, noise=0.1, random_state=42)
+
+X = torch.tensor(X, dtype=torch.float32)
+y = torch.tensor(y, dtype=torch.float32).unsqueeze(1)
+
+dataset = TensorDataset(X, y)
+dataloader = DataLoader(dataset, batch_size=32, shuffle=True)
+```
+
+## Treinamento
+
+```{python}
+#| colab: {base_uri: https://localhost:8080/, height: 449}
+num_epochs = 2_000
+loss_logs = []
+
+for epoch in range(num_epochs):
+
+    # Start epoch loss
+    running_loss = 0.0
+
+    for b, (X_batch, y_batch) in enumerate(dataloader):
+
+        # Forward pass
+        outputs = model(X_batch)
+        loss = criterion(outputs, y_batch)
+
+        # Backward pass and optimization
+        optimizer.zero_grad()
+        loss.backward()
+        optimizer.step()
+
+        # Update running loss
+        running_loss += loss.item()
+
+    # Update epoch loss
+    loss_logs.append(running_loss/b)
+
+# Plot loss
+plt.plot(loss_logs)
+plt.ylabel('Loss')
+plt.xlabel('Epoch')
+plt.show()
+```
+
+## Avaliação
+
+```{python}
+#| colab: {base_uri: https://localhost:8080/}
+with torch.no_grad():
+    outputs = model(X)
+
+print(
+    classification_report(
+        y.detach().numpy(),
+        outputs.detach().numpy() > 0.5
+    )
+)
+```
+
