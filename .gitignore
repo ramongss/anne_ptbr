@@ -13,3 +13,5 @@ __pycache__/
 
 # Data pesada (opcional, se o MNIST for grande demais)
 data/MNIST/
+/.quarto/
+**/*.quarto_ipynb
